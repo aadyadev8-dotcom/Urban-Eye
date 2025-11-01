@@ -68,14 +68,18 @@ const CommunityFeedPage = () => {
                   <p className="text-5xl font-bold">{pendingCount}</p>
                 </Card>
               </Link>
-              <Card className="bg-blue-600 text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center h-full">
-                <h2 className="text-xl font-semibold mb-2">In Progress</h2>
-                <p className="text-5xl font-bold">{inProgressCount}</p>
-              </Card>
-              <Card className="bg-green-600 text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center h-full">
-                <h2 className="text-xl font-semibold mb-2">Resolved</h2>
-                <p className="text-5xl font-bold">{resolvedCount}</p>
-              </Card>
+              <Link to="/in-progress-complaints" className="block h-full"> {/* Added Link */}
+                <Card className="bg-blue-600 text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center h-full">
+                  <h2 className="text-xl font-semibold mb-2">In Progress</h2>
+                  <p className="text-5xl font-bold">{inProgressCount}</p>
+                </Card>
+              </Link>
+              <Link to="/resolved-complaints" className="block h-full"> {/* Added Link */}
+                <Card className="bg-green-600 text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center h-full">
+                  <h2 className="text-xl font-semibold mb-2">Resolved</h2>
+                  <p className="text-5xl font-bold">{resolvedCount}</p>
+                </Card>
+              </Link>
             </div>
           )}
         </div>

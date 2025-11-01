@@ -9,7 +9,9 @@ import AddComplaintMediaPage from "./pages/AddComplaintMediaPage";
 import SplashPage from "./pages/SplashPage";
 import NewComplaintLocationPage from "./pages/NewComplaintLocationPage";
 import CommunityFeedPage from "./pages/CommunityFeedPage";
-import PendingComplaintsPage from "./pages/PendingComplaintsPage"; // Import the new page
+import PendingComplaintsPage from "./pages/PendingComplaintsPage";
+import InProgressComplaintsPage from "./pages/InProgressComplaintsPage"; // Import new page
+import ResolvedComplaintsPage from "./pages/ResolvedComplaintsPage"; // Import new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,7 +29,9 @@ const App = () => (
           <Route path="/new-complaint-media" element={<AddComplaintMediaPage />} />
           <Route path="/new-complaint-location" element={<NewComplaintLocationPage />} />
           <Route path="/community-feed" element={<CommunityFeedPage />} />
-          <Route path="/pending-complaints" element={<PendingComplaintsPage />} /> {/* New route */}
+          <Route path="/pending-complaints" element={<PendingComplaintsPage />} />
+          <Route path="/in-progress-complaints" element={<InProgressComplaintsPage />} /> {/* New route */}
+          <Route path="/resolved-complaints" element={<ResolvedComplaintsPage />} /> {/* New route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
