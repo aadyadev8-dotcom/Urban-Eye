@@ -1,4 +1,3 @@
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import ActionCard from "@/components/ActionCard";
 import { Plus, Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +39,6 @@ const Index = () => {
           />
         </div>
       </div>
-      <MadeWithDyad />
     </>
   );
 };
