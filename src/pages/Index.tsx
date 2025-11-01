@@ -1,8 +1,11 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import ActionCard from "@/components/ActionCard";
 import { Plus, Users, Trophy } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Index = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-app-background">
       <div className="bg-urban-card-background p-8 md:p-12 rounded-xl shadow-2xl max-w-md w-full text-center">
@@ -15,7 +18,7 @@ const Index = () => {
             title="New Complaint"
             description="Report an issue in your area."
             bgColor="bg-action-blue"
-            onClick={() => console.log("New Complaint clicked")}
+            onClick={() => navigate("/new-complaint-category")} // Navigate to the new page
           />
           <ActionCard
             icon={Users}

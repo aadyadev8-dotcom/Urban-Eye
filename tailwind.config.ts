@@ -68,6 +68,14 @@ export default {
         'action-blue': '#3B82F6', // Blue for New Complaint
         'action-green': '#22C55E', // Green for Community Feed
         'action-red': '#EF4444', // Red for View Leaderboard
+        // Custom colors for category buttons
+        'category-potholes': '#8B0032', // Dark Red/Maroon
+        'category-water': '#6600CC', // Purple
+        'category-streetlights': '#191932', // Very Dark Blue
+        'category-dumping': '#CC0033', // Red
+        'category-garbage': '#663300', // Brown
+        'category-amenities': '#800080', // Dark Magenta/Purple
+        'category-other': '#FF6699', // Bright Pink
       },
       borderRadius: {
         lg: "var(--radius)",
