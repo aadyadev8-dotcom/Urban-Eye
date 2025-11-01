@@ -5,7 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import NewComplaintCategory from "./pages/NewComplaintCategory"; // Import the new page
+import NewComplaintCategory from "./pages/NewComplaintCategory";
+import Layout from "./components/Layout"; // Import the new Layout component
 
 const queryClient = new QueryClient();
 
@@ -15,12 +16,14 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/new-complaint-category" element={<NewComplaintCategory />} /> {/* New route */}
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Layout> {/* Wrap Routes with Layout */}
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/new-complaint-category" element={<NewComplaintCategory />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

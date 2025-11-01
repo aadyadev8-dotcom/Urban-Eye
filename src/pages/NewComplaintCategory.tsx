@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 const categories = [
-  { name: "Potholes/Road Damage", color: "bg-category-potholes" },
-  { name: "Water Leakage", color: "bg-category-water" },
-  { name: "Broken Streetlights", color: "bg-category-streetlights" },
-  { name: "Illegal Dumping", "color": "bg-category-dumping" },
-  { name: "Garbage", color: "bg-category-garbage" },
-  { name: "Amenities", color: "bg-category-amenities" },
-  { name: "Other", color: "bg-category-other" },
+  { name: "Potholes/Road Damage" }, // Removed color property
+  { name: "Water Leakage" },
+  { name: "Broken Streetlights" },
+  { name: "Illegal Dumping" },
+  { name: "Garbage" },
+  { name: "Amenities" },
+  { name: "Other" },
 ];
 
 const NewComplaintCategory: React.FC = () => {
@@ -25,28 +25,26 @@ const NewComplaintCategory: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-app-background">
-      <div className="bg-urban-card-background p-8 md:p-12 rounded-xl shadow-2xl max-w-md w-full text-center">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">What issue would you like to report?</h1>
-        <p className="text-md md:text-lg text-gray-600 mb-8">Select a category to report a new issue.</p>
+    <> {/* Use a fragment as the main card is now in Layout */}
+      <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">What issue would you like to report?</h2> {/* Changed to h2 */}
+      <p className="text-md md:text-lg text-gray-600 mb-8">Select a category to report a new issue.</p>
 
-        <div className="grid grid-cols-2 gap-4">
-          {categories.map((category) => (
-            <div key={category.name}>
-              <Button
-                onClick={() => handleCategoryClick(category.name)}
-                className={cn(
-                  "flex flex-col items-center justify-center text-white p-4 rounded-lg shadow-xl border border-transparent w-full h-24 text-center transition-all transform hover:scale-105 hover:border-white/20",
-                  category.color
-                )}
-              >
-                <span className="text-lg font-semibold text-wrap">{category.name}</span>
-              </Button>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-2 gap-4">
+        {categories.map((category) => (
+          <div key={category.name}>
+            <Button
+              onClick={() => handleCategoryClick(category.name)}
+              className={cn(
+                "flex flex-col items-center justify-center text-white p-4 rounded-lg shadow-button-3d border border-transparent w-full h-24 text-center transition-all transform hover:scale-105 active:scale-95", // Added shadow, hover, active effects
+                "bg-gradient-to-br from-button-gradient-start to-button-gradient-end" // Applied new gradient
+              )}
+            >
+              <span className="text-lg font-semibold text-wrap">{category.name}</span>
+            </Button>
+          </div>
+        ))}
       </div>
-    </div>
+    </>
   );
 };
 

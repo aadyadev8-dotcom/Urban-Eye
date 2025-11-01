@@ -9,17 +9,16 @@ interface ActionCardProps {
   icon: LucideIcon;
   title: string;
   description: string;
-  bgColor: string;
   onClick: () => void;
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({ icon: Icon, title, description, bgColor, onClick }) => {
+const ActionCard: React.FC<ActionCardProps> = ({ icon: Icon, title, description, onClick }) => {
   return (
     <Button
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center text-white p-6 rounded-lg shadow-md w-full max-w-xs h-36 text-center transition-transform transform hover:scale-105",
-        bgColor
+        "flex flex-col items-center justify-center text-white p-6 rounded-lg shadow-button-3d border border-transparent w-full max-w-xs h-36 text-center transition-all transform hover:scale-105 active:scale-95", // Added shadow, hover, active effects
+        "bg-gradient-to-br from-button-gradient-start to-button-gradient-end" // Applied new gradient
       )}
     >
       <Icon className="h-8 w-8 mb-2" />
