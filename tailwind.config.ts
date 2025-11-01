@@ -62,6 +62,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom colors for Urban Eye app
+        'app-background': '#1A2335', // Dark blue
+        'urban-card-background': '#FFCCE5', // Pink
+        'action-blue': '#3B82F6', // Blue for New Complaint
+        'action-green': '#22C55E', // Green for Community Feed
+        'action-red': '#EF4444', // Red for View Leaderboard
       },
       borderRadius: {
         lg: "var(--radius)",

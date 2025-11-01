@@ -96,6 +96,6 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-app-background text-foreground; /* Using the new custom background color */
   }
 }
