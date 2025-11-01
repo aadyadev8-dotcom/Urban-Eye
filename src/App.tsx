@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import NewComplaintCategory from "./pages/NewComplaintCategory";
-import Layout from "./components/Layout"; // Import the new Layout component
+import Layout from "./components/Layout";
+import Splash from "./pages/Splash"; // Import the new Splash page
 
 const queryClient = new QueryClient();
 
@@ -16,14 +17,16 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout> {/* Wrap Routes with Layout */}
-          <Routes>
-            <Route path="/" element={<Index />} />
+        <Routes>
+          <Route path="/" element={<Splash />} /> {/* Splash screen as the initial route */}
+          {/* Routes that use the Layout component */}
+          <Route element={<Layout />}>
+            <Route path="/home" element={<Index />} /> {/* Main page now at /home */}
             <Route path="/new-complaint-category" element={<NewComplaintCategory />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+          </Route>
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
