@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content Area - now includes the nav bar */}
       <div className="bg-urban-card-background p-8 md:p-12 rounded-card-lg shadow-card-soft max-w-md w-full text-center">
         {/* Top Navigation Bar - now inside the card */}
-        <nav className="flex items-center justify-between p-4 -mx-8 -mt-8 mb-4 md:-mx-12 md:-mt-12 bg-gradient-to-r from-nav-gradient-start to-nav-gradient-end shadow-nav-elevation rounded-t-card-lg">
+        <nav className="flex items-center justify-between p-4 -mx-8 -mt-8 mb-4 md:-mx-12 md:-mt-12 bg-white shadow-nav-elevation rounded-t-card-lg">
           <h1 className="text-xl font-bold text-gray-800">Urban Eye</h1>
           <div className="flex space-x-4">
             <Home
