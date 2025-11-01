@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NewComplaintCategoryPage from "./pages/NewComplaintCategoryPage";
 import AddComplaintMediaPage from "./pages/AddComplaintMediaPage";
-import SplashPage from "./pages/SplashPage"; // Import the new SplashPage
+import SplashPage from "./pages/SplashPage";
+import NewComplaintLocationPage from "./pages/NewComplaintLocationPage"; // Import the new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,10 +19,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SplashPage />} /> {/* Set SplashPage as the initial route */}
-          <Route path="/home" element={<HomePage />} /> {/* HomePage is now at /home */}
+          <Route path="/" element={<SplashPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/new-complaint-category" element={<NewComplaintCategoryPage />} />
           <Route path="/new-complaint-media" element={<AddComplaintMediaPage />} />
+          <Route path="/new-complaint-location" element={<NewComplaintLocationPage />} /> {/* New route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
