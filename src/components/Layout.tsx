@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Home, Camera, Settings } from 'lucide-react';
+import { Home, Settings } from 'lucide-react'; // Removed Camera
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -26,13 +26,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             />
           </div>
           {/* Urban Eye in the center */}
-          <h1 className="flex-1 text-xl font-bold text-gray-800 text-center">Urban Eye</h1>
-          {/* Camera and Settings on the right */}
+          <h1 className="flex-1 text-2xl font-bold text-gray-800 text-center font-tan-meringue">Urban Eye</h1> {/* Increased font size and added custom font class */}
+          {/* Settings on the right */}
           <div className="absolute right-4 md:right-8 flex space-x-4">
-            <Camera
-              className="h-6 w-6 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
-              onClick={() => console.log("Take Photo clicked")} // Placeholder for camera/upload
-            />
             <Settings
               className="h-6 w-6 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
               onClick={() => console.log("Settings clicked")} // Placeholder for settings

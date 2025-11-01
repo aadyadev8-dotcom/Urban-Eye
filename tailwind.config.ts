@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'tan-meringue': ['TAN Meringue', 'sans-serif'], // Added TAN Meringue font family
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
