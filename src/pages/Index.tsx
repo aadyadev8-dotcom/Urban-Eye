@@ -10,7 +10,7 @@ const Index = () => {
       <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">Welcome to Urban Eye</h2> {/* Changed to h2 as h1 is in Layout */}
       <p className="text-md md:text-lg text-gray-600 mb-8">Your platform for community reporting and engagement.</p>
 
-      <div className="space-y-4">
+      <div className="space-y-4 flex flex-col items-center"> {/* Added flex flex-col items-center to center the cards */}
         <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <ActionCard
             icon={Plus}
