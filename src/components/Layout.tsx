@@ -17,13 +17,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content Area - now includes the nav bar */}
       <div className="bg-urban-card-background p-8 md:p-12 rounded-card-lg shadow-card-soft max-w-md w-full text-center">
         {/* Top Navigation Bar - now inside the card */}
-        <nav className="flex items-center justify-between p-4 -mx-8 -mt-8 mb-4 md:-mx-12 md:-mt-12 bg-white shadow-nav-elevation rounded-t-card-lg">
-          <h1 className="text-xl font-bold text-gray-800">Urban Eye</h1>
-          <div className="flex space-x-4">
+        <nav className="relative flex items-center p-4 -mx-8 -mt-8 mb-4 md:-mx-12 md:-mt-12 bg-white shadow-nav-elevation rounded-t-card-lg">
+          {/* Home button on the left */}
+          <div className="absolute left-4 md:left-8">
             <Home
               className="h-6 w-6 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
               onClick={() => navigate('/')}
             />
+          </div>
+          {/* Urban Eye in the center */}
+          <h1 className="flex-1 text-xl font-bold text-gray-800 text-center">Urban Eye</h1>
+          {/* Camera and Settings on the right */}
+          <div className="absolute right-4 md:right-8 flex space-x-4">
             <Camera
               className="h-6 w-6 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
               onClick={() => console.log("Take Photo clicked")} // Placeholder for camera/upload
