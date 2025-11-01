@@ -11,7 +11,8 @@ import NewComplaintLocationPage from "./pages/NewComplaintLocationPage";
 import CommunityFeedPage from "./pages/CommunityFeedPage";
 import PendingComplaintsPage from "./pages/PendingComplaintsPage";
 import InProgressComplaintsPage from "./pages/InProgressComplaintsPage";
-import ResolvedComplaintsPage from "./pages/ResolvedComplaintsPage"; // Corrected import path
+import ResolvedComplaintsPage from "./pages/ResolvedComplaintsPage";
+import LeaderboardPage from "./pages/LeaderboardPage"; // Import new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/pending-complaints" element={<PendingComplaintsPage />} />
           <Route path="/in-progress-complaints" element={<InProgressComplaintsPage />} />
           <Route path="/resolved-complaints" element={<ResolvedComplaintsPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} /> {/* New route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

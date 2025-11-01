@@ -29,7 +29,13 @@ const HomePage = () => {
                 <span className="text-sm font-normal opacity-80">See reported issues and their status.</span>
               </Button>
             </Link>
-            {/* Removed the link to the LeaderboardPage */}
+            <Link to="/leaderboard"> {/* Updated link to the new LeaderboardPage */}
+              <Button className="w-full h-24 bg-red-600 hover:bg-red-700 text-white flex flex-col items-center justify-center text-lg font-semibold">
+                <Trophy className="h-6 w-6 mb-1" />
+                View Leaderboard
+                <span className="text-sm font-normal opacity-80">Check out top community contributors.</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </main>
