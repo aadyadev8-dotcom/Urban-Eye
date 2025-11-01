@@ -14,59 +14,60 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isCapturing, setIsCapturing] = useState<boolean>(false);
-
-  const startCamera = useCallback(async () => {
-    setIsCapturing(true);
-    setCapturedImage(null);
-    if (stream) {
-      console.log("Stopping existing stream tracks.");
-      stream.getTracks().forEach(track => track.stop());
-    }
-    try {
-      console.log("Attempting to get user media...");
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-      console.log("User media obtained:", mediaStream);
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-        console.log("Video srcObject set.");
-        try {
-          await videoRef.current.play();
-          console.log("Video playing successfully.");
-        } catch (playError) {
-          console.error("Error playing video:", playError);
-          showError("Failed to play camera feed. Please check browser settings.");
-          // No onCancel here, as getUserMedia might have succeeded, but play failed.
-          // User can still cancel manually.
-        }
-      } else {
-        console.warn("videoRef.current is null when trying to set srcObject.");
-      }
-    } catch (err: any) {
-      console.error("Error accessing camera:", err);
-      let errorMessage = "Failed to access camera. Please ensure permissions are granted.";
-      if (err.name === "NotAllowedError") {
-        errorMessage = "Camera access denied. Please allow camera access in your browser settings.";
-      } else if (err.name === "NotFoundError") {
-        errorMessage = "No camera found on this device.";
-      } else if (err.name === "NotReadableError") {
-        errorMessage = "Camera is already in use by another application.";
-      }
-      showError(errorMessage);
-      onCancel(); // Go back if camera access fails
-    }
-  }, [stream, onCancel]);
+  const [triggerCameraRestart, setTriggerCameraRestart] = useState(0); // State to force useEffect re-run
 
   useEffect(() => {
-    startCamera();
+    let activeStream: MediaStream | null = null; // Use a local variable for the stream within this effect
 
-    return () => {
-      if (stream) {
-        console.log("Stopping stream tracks on unmount.");
-        stream.getTracks().forEach(track => track.stop());
+    const initCamera = async () => {
+      setIsCapturing(true);
+      setCapturedImage(null); // Clear any previous captured image
+
+      try {
+        console.log("Attempting to get user media from useEffect...");
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        console.log("User media obtained from useEffect:", mediaStream);
+        activeStream = mediaStream; // Assign to local variable for cleanup
+        setStream(mediaStream); // Update state for other parts of the component
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+          console.log("Video srcObject set from useEffect.");
+          try {
+            await videoRef.current.play();
+            console.log("Video playing successfully from useEffect.");
+          } catch (playError) {
+            console.error("Error playing video from useEffect:", playError);
+            showError("Failed to play camera feed. Please check browser settings.");
+          }
+        } else {
+          console.warn("videoRef.current is null when trying to set srcObject from useEffect.");
+        }
+      } catch (err: any) {
+        console.error("Error accessing camera from useEffect:", err);
+        let errorMessage = "Failed to access camera. Please ensure permissions are granted.";
+        if (err.name === "NotAllowedError") {
+          errorMessage = "Camera access denied. Please allow camera access in your browser settings.";
+        } else if (err.name === "NotFoundError") {
+          errorMessage = "No camera found on this device.";
+        } else if (err.name === "NotReadableError") {
+          errorMessage = "Camera is already in use by another application.";
+        }
+        showError(errorMessage);
+        onCancel();
       }
     };
-  }, [startCamera, stream]);
+
+    initCamera();
+
+    return () => {
+      // Cleanup function: stop the stream when component unmounts
+      if (activeStream) { // Use the local variable for cleanup
+        console.log("Stopping stream tracks on unmount from useEffect cleanup.");
+        activeStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [onCancel, triggerCameraRestart]); // `triggerCameraRestart` will force re-run when retakePhoto is called.
 
   const takePhoto = () => {
     if (videoRef.current && canvasRef.current) {
@@ -90,6 +91,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
         if (stream) {
           console.log("Stopping stream tracks after photo capture.");
           stream.getTracks().forEach(track => track.stop()); // Stop camera stream after capture
+          setStream(null); // Clear the stream state after stopping
         }
       }
     }
@@ -114,7 +116,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
 
   const retakePhoto = () => {
     setCapturedImage(null);
-    startCamera(); // Restart camera
+    setTriggerCameraRestart(prev => prev + 1); // Increment to trigger useEffect
   };
 
   return (
