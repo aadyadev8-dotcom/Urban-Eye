@@ -15,12 +15,15 @@ const Splash: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-app-background">
-      <img
-        src="/urban-eye-logo.png"
-        alt="Urban Eye Logo"
-        className="w-64 h-64 animate-fade-in" // Adjust size as needed, add fade-in animation
-      />
+    <div className="min-h-screen flex items-center justify-center bg-app-background p-4">
+      {/* This div constrains the logo's display area to match the main content card's width */}
+      <div className="max-w-md w-full flex items-center justify-center">
+        <img
+          src="/urban-eye-logo.png"
+          alt="Urban Eye Logo"
+          className="max-w-full h-auto animate-fade-in" // Make logo responsive within its container
+        />
+      </div>
     </div>
   );
 };
