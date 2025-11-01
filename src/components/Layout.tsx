@@ -13,10 +13,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-app-background">
-      {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-10 bg-gradient-to-r from-nav-gradient-start to-nav-gradient-end shadow-nav-elevation">
-        <div className="max-w-md mx-auto flex items-center justify-between p-4 w-full"> {/* This div constrains the content */}
+    <div className="min-h-screen flex flex-col bg-app-background items-center justify-center p-4"> {/* Centering the card in the dark blue background */}
+      {/* Main Content Area - now includes the nav bar */}
+      <div className="bg-urban-card-background p-8 md:p-12 rounded-card-lg shadow-card-soft max-w-md w-full text-center">
+        {/* Top Navigation Bar - now inside the card */}
+        <nav className="flex items-center justify-between p-4 -mx-8 -mt-8 mb-4 md:-mx-12 md:-mt-12 bg-gradient-to-r from-nav-gradient-start to-nav-gradient-end shadow-nav-elevation rounded-t-card-lg">
           <h1 className="text-xl font-bold text-gray-800">Urban Eye</h1>
           <div className="flex space-x-4">
             <Home
@@ -32,15 +33,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               onClick={() => console.log("Settings clicked")} // Placeholder for settings
             />
           </div>
-        </div>
-      </nav>
-
-      {/* Main Content Area */}
-      <main className="flex-1 flex items-center justify-center p-4 pt-20"> {/* pt-20 to account for fixed header */}
-        <div className="bg-urban-card-background p-8 md:p-12 rounded-card-lg shadow-card-soft max-w-md w-full text-center">
-          {children}
-        </div>
-      </main>
+        </nav>
+        {children}
+      </div>
     </div>
   );
 };
