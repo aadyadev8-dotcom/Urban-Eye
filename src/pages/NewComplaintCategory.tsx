@@ -20,8 +20,7 @@ const NewComplaintCategory: React.FC = () => {
 
   const handleCategoryClick = (categoryName: string) => {
     console.log(`Selected category: ${categoryName}`);
-    // In a real app, you would navigate to a form page with this category pre-selected
-    // navigate(`/new-complaint-form?category=${categoryName}`);
+    navigate('/new-complaint-media', { state: { category: categoryName } });
   };
 
   return (

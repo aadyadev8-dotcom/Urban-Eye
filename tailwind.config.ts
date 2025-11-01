@@ -71,6 +71,7 @@ export default {
         'action-blue': '#3B82F6', // Blue for New Complaint
         'action-green': '#22C55E', // Green for Community Feed
         'action-red': '#8B0000', // Changed to Dark Red for View Leaderboard
+        'action-purple': '#8B5CF6', // New purple for "Add Description Only" button
         // Custom colors for category buttons (these will be overridden by the new button gradient)
         'category-potholes': '#8B0032', // Dark Red/Maroon
         'category-water': '#6600CC', // Purple
