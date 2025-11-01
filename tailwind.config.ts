@@ -62,6 +62,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "urban-eye-pink": "hsl(var(--urban-eye-pink))", // Added custom pink color
       },
       borderRadius: {
         lg: "var(--radius)",
