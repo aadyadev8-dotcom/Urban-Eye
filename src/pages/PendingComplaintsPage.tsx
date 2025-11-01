@@ -29,6 +29,7 @@ const PendingComplaintsPage = () => {
         .from('complaints')
         .select('*')
         .eq('status', 'Pending')
+        .or('image_url.not.is.null,video_url.not.is.null') // Filter for complaints with either an image or a video
         .order('created_at', { ascending: false });
 
       if (error) {
