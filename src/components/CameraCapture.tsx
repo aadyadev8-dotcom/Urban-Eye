@@ -19,18 +19,40 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
     setIsCapturing(true);
     setCapturedImage(null);
     if (stream) {
+      console.log("Stopping existing stream tracks.");
       stream.getTracks().forEach(track => track.stop());
     }
     try {
+      console.log("Attempting to get user media...");
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      console.log("User media obtained:", mediaStream);
       setStream(mediaStream);
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
-        videoRef.current.play();
+        console.log("Video srcObject set.");
+        try {
+          await videoRef.current.play();
+          console.log("Video playing successfully.");
+        } catch (playError) {
+          console.error("Error playing video:", playError);
+          showError("Failed to play camera feed. Please check browser settings.");
+          // No onCancel here, as getUserMedia might have succeeded, but play failed.
+          // User can still cancel manually.
+        }
+      } else {
+        console.warn("videoRef.current is null when trying to set srcObject.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error accessing camera:", err);
-      showError("Failed to access camera. Please ensure permissions are granted.");
+      let errorMessage = "Failed to access camera. Please ensure permissions are granted.";
+      if (err.name === "NotAllowedError") {
+        errorMessage = "Camera access denied. Please allow camera access in your browser settings.";
+      } else if (err.name === "NotFoundError") {
+        errorMessage = "No camera found on this device.";
+      } else if (err.name === "NotReadableError") {
+        errorMessage = "Camera is already in use by another application.";
+      }
+      showError(errorMessage);
       onCancel(); // Go back if camera access fails
     }
   }, [stream, onCancel]);
@@ -40,15 +62,23 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
 
     return () => {
       if (stream) {
+        console.log("Stopping stream tracks on unmount.");
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, [startCamera]);
+  }, [startCamera, stream]);
 
   const takePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
+      
+      // Ensure video has loaded metadata to get correct dimensions
+      if (video.videoWidth === 0 || video.videoHeight === 0) {
+        showError("Camera feed not ready. Please wait a moment and try again.");
+        return;
+      }
+
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       const context = canvas.getContext('2d');
@@ -58,6 +88,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
         setCapturedImage(imageDataUrl);
         setIsCapturing(false);
         if (stream) {
+          console.log("Stopping stream tracks after photo capture.");
           stream.getTracks().forEach(track => track.stop()); // Stop camera stream after capture
         }
       }
@@ -101,7 +132,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
           <Button
             className="bg-green-600 hover:bg-green-700 text-white text-lg font-semibold px-6 py-3 rounded-full"
             onClick={takePhoto}
-            disabled={!stream}
+            disabled={!stream || videoRef.current?.readyState < 2} // Disable if stream not ready
           >
             <Camera className="h-6 w-6 mr-2" />
             Capture
