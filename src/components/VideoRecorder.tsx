@@ -92,13 +92,20 @@ const VideoRecorder: React.FC<VideoRecorderProps> = ({ onRecord, onCancel }) => 
 
   const startRecording = () => {
     if (stream && videoRef.current && isVideoReady) {
-      setRecordedChunks([]);
+      const localRecordedChunks: BlobPart[] = []; // Use a local array for chunks during recording
+
       // Check for supported MIME types
       let options: MediaRecorderOptions = { mimeType: 'video/webm' }; // Default to webm
       if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
         options = { mimeType: 'video/webm; codecs=vp9' };
+      } else if (MediaRecorder.isTypeSupported('video/webm')) {
+        options = { mimeType: 'video/webm' };
       } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-        options = { mimeType: 'video/mp4' }; // Fallback to mp4 if webm/vp9 not supported
+        options = { mimeType: 'video/mp4' };
+      } else {
+        showError("No supported video recording format found on this device.");
+        onCancel(); // Cannot record if no format is supported
+        return;
       }
       console.log("Using MIME type for recording:", options.mimeType);
 
@@ -108,23 +115,21 @@ const VideoRecorder: React.FC<VideoRecorderProps> = ({ onRecord, onCancel }) => 
 
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
-            setRecordedChunks((prev) => {
-              console.log(`Data available: ${event.data.size} bytes. Total chunks: ${prev.length + 1}`);
-              return [...prev, event.data];
-            });
+            localRecordedChunks.push(event.data); // Push to local array
+            console.log(`Data available: ${event.data.size} bytes. Total chunks: ${localRecordedChunks.length}`);
           }
         };
 
         mediaRecorder.onstop = () => {
-          console.log("Recording stopped. Total chunks collected:", recordedChunks.length);
-          if (recordedChunks.length === 0) {
+          console.log("Recording stopped. Total chunks collected:", localRecordedChunks.length);
+          if (localRecordedChunks.length === 0) {
             showError("No video data was recorded. Please ensure you recorded for a sufficient duration.");
             setRecordedVideoUrl(null); // Ensure no black screen from empty data
             retakeVideo(); // Go back to live camera view
             return;
           }
 
-          const blob = new Blob(recordedChunks, { type: options.mimeType });
+          const blob = new Blob(localRecordedChunks, { type: options.mimeType });
           console.log("Created Blob with size:", blob.size, "bytes and type:", blob.type);
           if (blob.size === 0) {
             showError("Recorded video is empty. Please try again.");
@@ -136,6 +141,7 @@ const VideoRecorder: React.FC<VideoRecorderProps> = ({ onRecord, onCancel }) => 
           const url = URL.createObjectURL(blob);
           setRecordedVideoUrl(url);
           setIsRecording(false);
+          setRecordedChunks(localRecordedChunks as Blob[]); // Update state with final chunks
           showSuccess("Video recorded successfully!");
           // Stop stream tracks after recording is complete
           if (stream) {
@@ -173,7 +179,8 @@ const VideoRecorder: React.FC<VideoRecorderProps> = ({ onRecord, onCancel }) => 
 
   const confirmVideo = () => {
     if (recordedVideoUrl) {
-      const blob = new Blob(recordedChunks, { type: mediaRecorderRef.current?.mimeType || 'video/webm' }); // Use the actual mimeType used for recording
+      // Use the recordedChunks from state, which is now guaranteed to be up-to-date
+      const blob = new Blob(recordedChunks, { type: mediaRecorderRef.current?.mimeType || 'video/webm' });
       const file = new File([blob], `recorded-video-${Date.now()}.webm`, { type: blob.type });
       onRecord(file);
       // Revoke the object URL after confirming to free up memory
