@@ -152,7 +152,7 @@ const NewComplaintMedia: React.FC = () => {
       </div>
 
       {previewUrl && (
-        <div className="mb-6 animate-fade-in max-h-64 overflow-hidden"> {/* Added max-h-64 and overflow-hidden */}
+        <div className="mb-6 animate-fade-in max-h-96 overflow-hidden"> {/* Changed max-h-64 to max-h-96 */}
           <h3 className="text-lg font-semibold text-gray-700 mb-2">Preview:</h3>
           {isVideo ? (
             <video src={previewUrl} controls className="max-w-full h-auto rounded-lg shadow-md mx-auto"></video>
