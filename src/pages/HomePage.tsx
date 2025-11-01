@@ -22,14 +22,14 @@ const HomePage = () => {
                 <span className="text-sm font-normal opacity-80">Report an issue in your area.</span>
               </Button>
             </Link>
-            <Link to="/community-feed"> {/* Assuming a community feed page will be added later */}
+            <Link to="/community-feed">
               <Button className="w-full h-24 bg-green-600 hover:bg-green-700 text-white flex flex-col items-center justify-center text-lg font-semibold">
                 <Users className="h-6 w-6 mb-1" />
                 Community Feed
                 <span className="text-sm font-normal opacity-80">See reported issues and their status.</span>
               </Button>
             </Link>
-            <Link to="/leaderboard"> {/* Assuming a leaderboard page will be added later */}
+            <Link to="/leaderboard"> {/* Updated link to the new LeaderboardPage */}
               <Button className="w-full h-24 bg-red-600 hover:bg-red-700 text-white flex flex-col items-center justify-center text-lg font-semibold">
                 <Trophy className="h-6 w-6 mb-1" />
                 View Leaderboard
