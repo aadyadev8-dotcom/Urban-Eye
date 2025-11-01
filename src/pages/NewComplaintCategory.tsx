@@ -31,8 +31,8 @@ const NewComplaintCategory: React.FC = () => {
         <p className="text-md md:text-lg text-gray-600 mb-8">Select a category to report a new issue.</p>
 
         <div className="grid grid-cols-2 gap-4">
-          {categories.map((category, index) => (
-            <div key={category.name} className="animate-fade-in" style={{ animationDelay: `${0.1 * (index + 1)}s` }}>
+          {categories.map((category) => (
+            <div key={category.name}>
               <Button
                 onClick={() => handleCategoryClick(category.name)}
                 className={cn(
