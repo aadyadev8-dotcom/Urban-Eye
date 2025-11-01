@@ -3,10 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Camera, Video, Upload, FileText } from 'lucide-react';
+import { Camera, Video, Upload } from 'lucide-react';
 
 const NewComplaintMedia: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +17,6 @@ const NewComplaintMedia: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [isVideo, setIsVideo] = useState<boolean>(false);
-  const [remoteUrlInput, setRemoteUrlInput] = useState<string>('');
 
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -43,23 +41,7 @@ const NewComplaintMedia: React.FC = () => {
       setPreviewUrl(url);
       setIsVideo(file.type.startsWith('video/'));
       setUploadStatus(null); // Clear previous status
-      setRemoteUrlInput(''); // Clear remote URL input
       console.log('File selected for preview:', file.name, 'Type:', file.type);
-    }
-  };
-
-  const handleRemoteUrlInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const url = event.target.value;
-    setRemoteUrlInput(url);
-    if (url) {
-      setPreviewUrl(url);
-      setIsVideo(url.match(/\.(mp4|webm|ogg)$/i) !== null); // Simple check for video extension
-      setSelectedFile(null); // Clear local file selection
-      setUploadStatus(null); // Clear previous status
-      console.log('Remote URL entered for preview:', url);
-    } else {
-      setPreviewUrl(null);
-      setIsVideo(false);
     }
   };
 
@@ -91,18 +73,13 @@ const NewComplaintMedia: React.FC = () => {
         console.error('Network error during media upload:', error);
         return null;
       }
-    } else if (remoteUrlInput) {
-      // If a remote URL is provided, just use it directly, no actual upload needed
-      setUploadStatus('✅ URL Accepted!');
-      console.log('Using remote URL:', remoteUrlInput);
-      return remoteUrlInput;
     }
     return null;
   };
 
   const handleContinueToLocation = async () => {
     let fileUrl = null;
-    if (selectedFile || remoteUrlInput) {
+    if (selectedFile) {
       fileUrl = await uploadMedia();
       if (!fileUrl) {
         console.error('Failed to get file URL, cannot continue to location.');
@@ -114,22 +91,10 @@ const NewComplaintMedia: React.FC = () => {
       category,
       description,
       fileUrl,
-      isVideo: isVideo && (selectedFile || remoteUrlInput), // Only true if media is present and is video
+      isVideo: isVideo && selectedFile, // Only true if media is present and is video
     };
     localStorage.setItem('tempComplaint', JSON.stringify(tempComplaint));
     console.log('Temporary complaint data stored in localStorage:', tempComplaint);
-    navigate('/map.html'); // Navigate to the static map page
-  };
-
-  const handleAddDescriptionOnly = () => {
-    const tempComplaint = {
-      category,
-      description,
-      fileUrl: null, // No media attached
-      isVideo: false,
-    };
-    localStorage.setItem('tempComplaint', JSON.stringify(tempComplaint));
-    console.log('Description-only complaint data stored in localStorage:', tempComplaint);
     navigate('/map.html'); // Navigate to the static map page
   };
 
@@ -186,16 +151,6 @@ const NewComplaintMedia: React.FC = () => {
         </Button>
       </div>
 
-      <div className="mb-6">
-        <Input
-          type="text"
-          placeholder="Or paste image/video URL here (optional)"
-          value={remoteUrlInput}
-          onChange={handleRemoteUrlInputChange}
-          className="w-full p-2 border rounded-md text-gray-700 focus:ring-action-blue focus:border-action-blue"
-        />
-      </div>
-
       {previewUrl && (
         <div className="mb-6 animate-fade-in">
           <h3 className="text-lg font-semibold text-gray-700 mb-2">Preview:</h3>
@@ -229,15 +184,8 @@ const NewComplaintMedia: React.FC = () => {
 
       <div className="space-y-4">
         <Button
-          onClick={handleAddDescriptionOnly}
-          className="w-full flex items-center justify-center bg-action-purple text-white py-3 px-6 rounded-lg shadow-button-3d hover:scale-105 active:scale-95 transition-all font-semibold"
-        >
-          <FileText className="h-5 w-5 mr-2" />
-          Add Description Only
-        </Button>
-        <Button
           onClick={handleContinueToLocation}
-          disabled={!description && !selectedFile && !remoteUrlInput} // Disable if no description and no media
+          disabled={!description && !selectedFile} // Disable if no description and no media
           className="w-full bg-action-green text-white py-3 px-6 rounded-lg shadow-button-3d hover:scale-105 active:scale-95 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Continue to Location
