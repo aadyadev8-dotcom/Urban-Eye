@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import { showSuccess, showError, showLoading, dismissToast } from '@/utils/toast';
 import { supabase } from '@/integrations/supabase/client'; // Import Supabase client
 import CameraCapture from '@/components/CameraCapture'; // Import the new CameraCapture component
+import VideoRecorder from '@/components/VideoRecorder'; // Import the new VideoRecorder component
 
 const AddComplaintMediaPage = () => {
   const location = useLocation();
@@ -19,9 +20,9 @@ const AddComplaintMediaPage = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<'image' | 'video' | null>(null);
   const [showCamera, setShowCamera] = useState<boolean>(false); // State to control camera visibility
+  const [showVideoRecorder, setShowVideoRecorder] = useState<boolean>(false); // State to control video recorder visibility
 
-  // Separate refs for each input type (only used for video/gallery now)
-  const videoInputRef = useRef<HTMLInputElement>(null);
+  // Separate refs for each input type (only used for gallery now)
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -57,13 +58,21 @@ const AddComplaintMediaPage = () => {
     setShowCamera(false); // Hide camera after capture
   };
 
+  const handleRecordedVideo = (file: File) => {
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+    setMediaType('video');
+    setShowVideoRecorder(false); // Hide video recorder after recording
+  };
+
   const handleClearMedia = () => {
     setSelectedFile(null);
     setPreviewUrl(null);
     setMediaType(null);
     // Clear all file inputs
-    if (videoInputRef.current) videoInputRef.current.value = '';
     if (galleryInputRef.current) galleryInputRef.current.value = '';
+    setShowCamera(false); // Ensure camera is off
+    setShowVideoRecorder(false); // Ensure video recorder is off
   };
 
   const uploadMediaToSupabase = async (file: File) => {
@@ -117,6 +126,10 @@ const AddComplaintMediaPage = () => {
     return <CameraCapture onCapture={handleCapturedPhoto} onCancel={() => setShowCamera(false)} />;
   }
 
+  if (showVideoRecorder) {
+    return <VideoRecorder onRecord={handleRecordedVideo} onCancel={() => setShowVideoRecorder(false)} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-white">
       <Header />
@@ -135,7 +148,7 @@ const AddComplaintMediaPage = () => {
             </Button>
             <Button
               className="h-24 bg-blue-600 hover:bg-blue-700 text-white flex flex-col items-center justify-center"
-              onClick={() => videoInputRef.current?.click()}
+              onClick={() => setShowVideoRecorder(true)} // Show in-app video recorder
             >
               <Video className="h-6 w-6 mb-1" />
               Record Video
@@ -148,15 +161,6 @@ const AddComplaintMediaPage = () => {
               Upload from Gallery
             </Button>
             
-            {/* Hidden input for recording videos */}
-            <input
-              type="file"
-              accept="video/*"
-              capture="user"
-              ref={videoInputRef}
-              onChange={handleFileChange}
-              className="hidden"
-            />
             {/* Hidden input for uploading from gallery */}
             <input
               type="file"
